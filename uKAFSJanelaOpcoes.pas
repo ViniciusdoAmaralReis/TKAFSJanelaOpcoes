@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, System.SysUtils, System.UITypes,
   FMX.Forms, FMX.Layouts, FMX.Types,
-  uKAFSBotao, UntKAFSJanelaModal;
+  uKAFSBotao, uKAFSJanelaModal;
 
 type
   TKAFSJanelaOpcoes = class(TKAFSJanelaModal)
@@ -23,7 +23,7 @@ type
 implementation
 
 uses
-  UntKAFSJanelaSobre;
+  uKAFSJanelaSobre;
 
 constructor TKAFSJanelaOpcoes.Create(AOwner: TComponent);
 begin
