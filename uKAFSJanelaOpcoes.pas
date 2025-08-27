@@ -4,13 +4,13 @@ interface
 
 uses
   System.Classes, System.SysUtils, System.UITypes,
-  FMX.Forms, FMX.Layouts, FMX.Types,
+  FMX.Forms, FMX.Graphics, FMX.Layouts, FMX.Types,
   uKAFSBotao, uKAFSJanelaModal;
 
 type
   TKAFSJanelaOpcoes = class(TKAFSJanelaModal)
-    ScbCorpo: TScrollBox;
-    BtnSobre: TKAFSBotao;
+    scrollCorpo: TScrollBox;
+    btnSobre: TKAFSBotao;
 
     constructor Create(AOwner: TComponent); override;
     procedure KAFSJanelaOpcoesConfig(const _cortema1, _cortema2: TAlphaColor);
@@ -29,23 +29,23 @@ constructor TKAFSJanelaOpcoes.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
 
-  ScbCorpo := TScrollBox.Create(Self);
-  with ScbCorpo do
+  scrollCorpo := TScrollBox.Create(Self);
+  with scrollCorpo do
   begin
     Align := TAlignLayout.Client;
-    Parent := RecCorpo;
+    Parent := rectCorpo;
   end;
 
-  BtnSobre := TKAFSBotao.Create(Self);
-  with BtnSobre do
+  btnSobre := TKAFSBotao.Create(Self);
+  with btnSobre do
   begin
     Align := TAlignLayout.Bottom;
-    Parent := RecCorpo;
-    LabDescricao.Font.Size := 24;
-    LabDescricao.Text := 'Sobre';
-    Margins.Bottom := 10;
-    Margins.Left := 50;
-    Margins.Right := 50;
+    Parent := rectCorpo;
+    labDescricao.Font.Size := 24;
+    labDescricao.Text := 'Sobre';
+    labDescricao.TextSettings.Font.Style := [TFontStyle.fsUnderline];
+    Margins.Bottom := 5;
+    Stroke.Kind := TBrushKind.None;
   end;
 end;
 
@@ -60,16 +60,16 @@ begin
   KAFSJanelaModalConfig(_cortema1, _cortema2, 'Opções', '🔧', _sair);
 
   // Associa procedures aos botões
-  BtnVoltar.OnClick := Retornar;
-  BtnConfirmar.OnClick := Sair;
+  btnVoltar.btnBotao.OnClick := Retornar;
+  btnConfirmar.btnBotao.OnClick := Sair;
 
   // Cor dos botões de ação e texto
-  with BtnSobre do
+  with btnSobre do
   begin
-    Fill.Color := _cortema1;
-    LabDescricao.FontColor := _cortema2;
+    Fill.Color := _cortema2;
+    labDescricao.FontColor := _cortema1;
 
-    OnCLick := Sobre;
+    btnBotao.OnCLick := Sobre;
   end;
 
   TThread.Synchronize(nil, procedure begin Visible := True; end);
@@ -84,8 +84,8 @@ procedure TKAFSJanelaOpcoes.Sobre(Sender: TObject);
 begin
   var _sobre := TKAFSJanelaSobre.Create(Parent);
   _sobre.KAFSJanelaSobreConfig(
-    Labtitulo.FontColor,
-    RecCorpo.Fill.Color);
+    labtitulo.FontColor,
+    rectCorpo.Fill.Color);
 end;
 
 procedure TKAFSJanelaOpcoes.Sair(Sender: TObject);
@@ -95,8 +95,8 @@ end;
 
 destructor TKAFSJanelaOpcoes.Destroy;
 begin
-  if Assigned(ScbCorpo) then
-    FreeAndNil(ScbCorpo);
+  if Assigned(scrollCorpo) then
+    FreeAndNil(scrollCorpo);
 
   inherited Destroy;
 end;
