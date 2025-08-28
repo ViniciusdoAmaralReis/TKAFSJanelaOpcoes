@@ -12,7 +12,7 @@ type
     scrollCorpo: TScrollBox;
     btnSobre: TKAFSBotao;
 
-    constructor Create(AOwner: TComponent); override;
+    constructor Create(AOwner: TComponent); reintroduce;
     procedure KAFSJanelaOpcoesConfig(const _cortema1, _cortema2: TAlphaColor);
     procedure Retornar(Sender: TObject);
     procedure Sobre(Sender: TObject);
@@ -95,8 +95,6 @@ end;
 
 destructor TKAFSJanelaOpcoes.Destroy;
 begin
-  if Assigned(scrollCorpo) then
-    FreeAndNil(scrollCorpo);
 
   inherited Destroy;
 end;
