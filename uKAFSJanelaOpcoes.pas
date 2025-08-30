@@ -41,9 +41,8 @@ begin
   begin
     Align := TAlignLayout.Bottom;
     Parent := rectCorpo;
-    labDescricao.Font.Size := 24;
+    labDescricao.Font.Size := 20;
     labDescricao.Text := 'Sobre';
-    labDescricao.TextSettings.Font.Style := [TFontStyle.fsUnderline];
     Margins.Bottom := 5;
     Stroke.Kind := TBrushKind.None;
   end;
