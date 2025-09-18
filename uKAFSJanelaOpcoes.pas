@@ -9,11 +9,12 @@ uses
 
 type
   TKAFSJanelaOpcoes = class(TKAFSJanelaModal)
-    scrollCorpo: TScrollBox;
+    sclCorpo: TScrollBox;
     btnSobre: TKAFSBotao;
+    imgLogoSobre: TBitmap;
 
     constructor Create(AOwner: TComponent); reintroduce;
-    procedure KAFSJanelaOpcoesConfig(const _cortema1, _cortema2: TAlphaColor);
+    procedure KAFSJanelaOpcoesConfig(const _cortema1, _cortema2: TAlphaColor; const _imgLogoOpcoes, _imgLogoSobre: TBitmap);
     procedure Retornar(Sender: TObject);
     procedure Sobre(Sender: TObject);
     procedure Sair(Sender: TObject);
@@ -27,64 +28,62 @@ uses
 
 constructor TKAFSJanelaOpcoes.Create(AOwner: TComponent);
 begin
-  inherited Create(AOwner);
-
-  scrollCorpo := TScrollBox.Create(Self);
-  with scrollCorpo do
+  TThread.Synchronize(nil, procedure
   begin
-    Align := TAlignLayout.Client;
-    Parent := rectCorpo;
-  end;
+    inherited Create(AOwner);
 
-  btnSobre := TKAFSBotao.Create(Self);
-  with btnSobre do
-  begin
-    Align := TAlignLayout.Bottom;
-    Parent := rectCorpo;
-    labDescricao.Font.Size := 20;
-    labDescricao.Text := 'Sobre';
-    Margins.Bottom := 5;
-    Stroke.Kind := TBrushKind.None;
-  end;
+    sclCorpo := TScrollBox.Create(Self);
+    sclCorpo.Align := TAlignLayout.Client;
+    sclCorpo.Parent := Self.recCorpo;
+
+    btnSobre := TKAFSBotao.Create(Self);
+    btnSobre.Align := TAlignLayout.Bottom;
+    btnSobre.Parent := Self.recCorpo;
+    btnSobre.labDescricao.Font.Size := 20;
+    btnSobre.labDescricao.Text := 'Sobre';
+    btnSobre.Margins.Bottom := 5;
+    btnSobre.Stroke.Kind := TBrushKind.None;
+  end);
 end;
 
-procedure TKAFSJanelaOpcoes.KAFSJanelaOpcoesConfig(const _cortema1, _cortema2: TAlphaColor);
+procedure TKAFSJanelaOpcoes.KAFSJanelaOpcoesConfig(const _cortema1, _cortema2: TAlphaColor; const _imgLogoOpcoes, _imgLogoSobre: TBitmap);
 begin
   var _sair := '';
   {$IFDEF MSWINDOWS}
   _sair := 'Fechar ❯';
   {$ENDIF}
 
-  // Configura propriedades da tela padrão
-  KAFSJanelaModalConfig(_cortema1, _cortema2, 'Opções', '🔧', _sair);
+  KAFSJanelaModalConfig(_cortema1, _cortema2, _imgLogoOpcoes, 'Opções', _sair);
 
-  // Associa procedures aos botões
-  btnVoltar.btnBotao.OnClick := Retornar;
-  btnConfirmar.btnBotao.OnClick := Sair;
-
-  // Cor dos botões de ação e texto
-  with btnSobre do
+  TThread.Synchronize(nil, procedure
   begin
-    Fill.Color := _cortema2;
-    labDescricao.FontColor := _cortema1;
+    // Configura componentes
+    imgLogoSobre := _imgLogoSobre;
 
-    btnBotao.OnCLick := Sobre;
-  end;
+    btnVoltar.btnBotao.OnClick := Retornar;
 
-  TThread.Synchronize(nil, procedure begin Visible := True; end);
+    btnSobre.btnBotao.OnCLick := Sobre;
+    btnSobre.Fill.Color := _cortema2;
+    btnSobre.labDescricao.FontColor := _cortema1;
+
+    btnConfirmar.btnBotao.OnClick := Sair;
+
+    Self.Visible := True;
+  end);
 end;
 
 procedure TKAFSJanelaOpcoes.Retornar(Sender: TObject);
 begin
-  Free;
+  Self.Free;
 end;
 
 procedure TKAFSJanelaOpcoes.Sobre(Sender: TObject);
 begin
   var _sobre := TKAFSJanelaSobre.Create(Parent);
   _sobre.KAFSJanelaSobreConfig(
-    labtitulo.FontColor,
-    rectCorpo.Fill.Color);
+    Self.recTitulo.Fill.Color,
+    Self.recCorpo.Fill.Color,
+    imgLogoSobre);
 end;
 
 procedure TKAFSJanelaOpcoes.Sair(Sender: TObject);
